@@ -78,13 +78,14 @@ function App() {
       return;
     }
 
-    // Handle usage limit checks based on authentication status
     if (!authState.isAuthenticated) {
+      // User is not logged in → show login warning after free uploads
       if (usageData.uploads_used >= usageData.limit) {
         setShowLoginWarning(true);
         return;
       }
     } else {
+      // User is logged in → show professional popup when plan limit reached
       if (usageData.uploads_used >= usageData.limit) {
         setShowUpgradeModal(true);
         return;
