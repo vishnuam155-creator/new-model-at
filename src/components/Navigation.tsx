@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import LoginModal from './LoginModal';
 
 const Navigation: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { authState, logout } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <>
+      <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -61,12 +72,12 @@ const Navigation: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <a 
-                href="./login_page_FireBase/firebase_login.html"
+              <button
+                onClick={openLoginModal}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
               >
                 Login-Signup
-              </a>
+              </button>
             )}
           </nav>
 
@@ -120,18 +131,21 @@ const Navigation: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <a 
-                  href="./login_page_FireBase/firebase_login.html"
+                <button
+                  onClick={openLoginModal}
                   className="block px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center"
                 >
                   Login-Signup
-                </a>
+                </button>
               )}
             </div>
           </div>
         )}
       </div>
-    </header>
+      </header>
+      
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+    </>
   );
 };
 
