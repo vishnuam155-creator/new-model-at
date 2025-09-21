@@ -39,21 +39,24 @@ function App() {
     try {
       const response = await fetch(`${API_BASE}/resume_checker/`, {
         method: "GET",
-        headers: authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {},
+        headers: {
+          ...(authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {}),
+          'Content-Type': 'application/json'
+        },
         credentials: "include"
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Usage check failed:', errorData);
-        return { uploads_used: 0, limit: 0, error: errorData.error || 'Failed to check usage' };
+        console.error('Usage check failed:', response.status);
+        return { uploads_used: 0, limit: 2, error: 'Failed to check usage' };
       }
       
       const data = await response.json();
+      console.log('Usage data:', data); // Debug log
       return data;
     } catch (error) {
       console.error('Error checking usage:', error);
-      return { uploads_used: 0, limit: 0, error: 'Network error' };
+      return { uploads_used: 0, limit: 2, error: 'Network error' };
     }
   };
 
@@ -81,20 +84,18 @@ function App() {
       return;
     }
 
-    if (usageData.error) {
-      alert(usageData.error);
-      return;
-    }
+    console.log('Current usage:', usageData); // Debug log
+    console.log('Auth state:', authState.isAuthenticated); // Debug log
 
-    // Check limits based on authentication status
+    // Check limits based on authentication status - EXACTLY like JS
     if (!authState.isAuthenticated) {
-      // User is not logged in → show login warning when free limit reached
+      // User is not logged in (guest) → show login warning when free limit reached
       if (usageData.uploads_used >= usageData.limit) {
         setShowLoginWarning(true);
         return;
       }
     } else {
-      // User is logged in → show upgrade popup when plan limit reached
+      // User is logged in → show upgrade modal when plan limit reached
       if (usageData.uploads_used >= usageData.limit) {
         setShowUpgradeModal(true);
         return;
@@ -120,12 +121,15 @@ function App() {
 
       const response = await fetch(`${API_BASE}/resume_checker/`, {
         method: "POST",
-        headers: authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {},
+        headers: {
+          ...(authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {})
+        },
         body: formData,
         credentials: "include"
       });
 
       const data = await response.json();
+      console.log('Submit response:', data); // Debug log
 
       if (response.ok) {
         // Format the response exactly like the JavaScript version
@@ -140,9 +144,20 @@ function App() {
         
         setResultContent(formatted);
       } else {
+        // Handle specific error cases
+        if (response.status === 403) {
+          // This is a limit reached error from backend
+          if (!authState.isAuthenticated) {
+            setShowLoginWarning(true);
+          } else {
+            setShowUpgradeModal(true);
+          }
+          return;
+        }
         setResultContent(`<p style="color:red;">${data.error || "Something went wrong"}</p>`);
       }
     } catch (error) {
+      console.error('Submit error:', error);
       setResultContent('<p style="color:red;">Error: Network error occurred. Please try again.</p>');
     } finally {
       setIsLoading(false);
