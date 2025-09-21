@@ -40,6 +40,7 @@ export const useAuth = () => {
         await fetch(`${API_BASE}/logout/`, {
           method: "POST",
           headers: { Authorization: `Token ${authState.authToken}` },
+          credentials: "include"
         });
       } catch (err) {
         console.error("Logout error", err);
@@ -59,9 +60,15 @@ export const useAuth = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username }),
+          credentials: "include"
         });
         const data = await res.json();
-        setAuth(token, username, data.plan);
+        if (res.ok && data.plan) {
+          setAuth(token, username, data.plan);
+        } else {
+          console.error("Failed to get user plan:", data);
+          clearAuth();
+        }
       } catch (err) {
         console.error("Auth check failed", err);
         clearAuth();

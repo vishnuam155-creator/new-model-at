@@ -42,10 +42,15 @@ function App() {
         headers: authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {},
         credentials: "include"
       });
-      return await response.json();
+      const data = await response.json();
+      if (!response.ok) {
+        console.error('Usage check failed:', data);
+        return { uploads_used: 0, limit: 0, error: data.error || 'Failed to check usage' };
+      }
+      return data;
     } catch (error) {
       console.error('Error checking usage:', error);
-      return null;
+      return { uploads_used: 0, limit: 0, error: 'Network error' };
     }
   };
 

@@ -49,7 +49,7 @@ const Navigation: React.FC = () => {
             {authState.isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 {authState.user && (
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-gray-600 hidden sm:inline">
                     Welcome, {authState.user.username} ({authState.user.plan})
                   </span>
                 )}
@@ -108,7 +108,7 @@ const Navigation: React.FC = () => {
               {authState.isAuthenticated ? (
                 <div className="px-3 py-2 space-y-2">
                   {authState.user && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 text-center">
                       Welcome, {authState.user.username} ({authState.user.plan})
                     </div>
                   )}
