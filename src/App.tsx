@@ -42,11 +42,14 @@ function App() {
         headers: authState.authToken ? { Authorization: `Token ${authState.authToken}` } : {},
         credentials: "include"
       });
-      const data = await response.json();
+      
       if (!response.ok) {
-        console.error('Usage check failed:', data);
-        return { uploads_used: 0, limit: 0, error: data.error || 'Failed to check usage' };
+        const errorData = await response.json();
+        console.error('Usage check failed:', errorData);
+        return { uploads_used: 0, limit: 0, error: errorData.error || 'Failed to check usage' };
       }
+      
+      const data = await response.json();
       return data;
     } catch (error) {
       console.error('Error checking usage:', error);
@@ -71,7 +74,7 @@ function App() {
       return;
     }
 
-    // Check usage limits
+    // Check usage limits first (before submitting)
     const usageData = await checkUsageLimit();
     if (!usageData) {
       alert("Error checking usage limits. Please try again.");
@@ -83,21 +86,22 @@ function App() {
       return;
     }
 
+    // Check limits based on authentication status
     if (!authState.isAuthenticated) {
-      // User is not logged in → show login warning after free uploads
+      // User is not logged in → show login warning when free limit reached
       if (usageData.uploads_used >= usageData.limit) {
         setShowLoginWarning(true);
         return;
       }
     } else {
-      // User is logged in → show professional popup when plan limit reached
+      // User is logged in → show upgrade popup when plan limit reached
       if (usageData.uploads_used >= usageData.limit) {
         setShowUpgradeModal(true);
         return;
       }
     }
 
-    // Submit form
+    // If we reach here, user is within limits - proceed with submission
     setIsLoading(true);
     setResultContent("Processing... please wait.");
     setShowResults(true);
@@ -124,12 +128,22 @@ function App() {
       const data = await response.json();
 
       if (response.ok) {
-        setResultContent(data.response);
+        // Format the response exactly like the JavaScript version
+        let formatted = data.response
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/^\* (.*$)/gim, '<li>$1</li>');
+        
+        if (formatted.includes('<li>')) {
+          formatted = '<ul>' + formatted + '</ul>';
+        }
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        setResultContent(formatted);
       } else {
-        setResultContent(`Error: ${data.error || "Something went wrong"}`);
+        setResultContent(`<p style="color:red;">${data.error || "Something went wrong"}</p>`);
       }
     } catch (error) {
-      setResultContent("Error: Network error occurred. Please try again.");
+      setResultContent('<p style="color:red;">Error: Network error occurred. Please try again.</p>');
     } finally {
       setIsLoading(false);
     }

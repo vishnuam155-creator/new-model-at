@@ -36,10 +36,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ isVisible, content, isL
               <span className="ml-3 text-gray-600 italic">Processing... please wait.</span>
             </div>
           ) : (
-            <div 
-              className="prose prose-gray max-w-none"
-              dangerouslySetInnerHTML={{ __html: finalContent }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: content }} />
           )}
         </div>
       </div>
