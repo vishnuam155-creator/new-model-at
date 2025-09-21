@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    /* background-color: #ffffff; */
+    padding: 40px;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666666;
+    margin-bottom: 30px;
+}
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.social-buttons button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.social-buttons button i {
+    margin-right: 10px;
+}
+
+.facebook {
+    background-color: #3b5998;
+}
+
+.facebook:hover {
+    background-color: #2d4373;
+}
+
+.google {
+    background-color: #ea4335;
+}
+
+.google:hover {
+    background-color: #c52219;
+}
+
+.linkedin {
+    background-color: #0077b5;
+}
+
+.linkedin:hover {
+    background-color: #005f8f;
+}
+
+.email {
+    background-color: #6c757d; /* A neutral color for email, could be changed */
+}
+
+.email:hover {
+    background-color: #5a6268;
+}
+
+.Personal{
+    background-color: #3fe883;
+}
+.Personal:hover {
+    background-color: #17c749;
+}
+
+.signup-link {
+    font-size: 15px;
+    color: #666666;
+}
+
+.signup-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    /* font-weight: bold; */
+    color: #000000;
+    cursor: pointer;
+    z-index: 1000;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
