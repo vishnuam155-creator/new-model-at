@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
+import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 import LoginModal from './LoginModal';
 
 const Navigation: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const { authState, logout } = useAuth();
+  const { authState, logout } = useFirebaseAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -59,9 +59,9 @@ const Navigation: React.FC = () => {
             
             {authState.isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                {authState.user && (
+                {authState.user?.email && (
                   <span className="text-sm text-gray-600 hidden sm:inline">
-                    Welcome, {authState.user.username} ({authState.user.plan})
+                    Welcome, {authState.user.email.split('@')[0]} ({authState.plan})
                   </span>
                 )}
                 <button
@@ -118,9 +118,9 @@ const Navigation: React.FC = () => {
               
               {authState.isAuthenticated ? (
                 <div className="px-3 py-2 space-y-2">
-                  {authState.user && (
+                  {authState.user?.email && (
                     <div className="text-sm text-gray-600 text-center">
-                      Welcome, {authState.user.username} ({authState.user.plan})
+                      Welcome, {authState.user.email.split('@')[0]} ({authState.plan})
                     </div>
                   )}
                   <button

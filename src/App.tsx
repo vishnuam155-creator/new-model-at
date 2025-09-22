@@ -7,13 +7,13 @@ import ResultsSection from './components/ResultsSection';
 import LoginWarningModal from './components/LoginWarningModal';
 import UpgradeLimitModal from './components/UpgradeLimitModal';
 import Footer from './components/Footer';
-import { useAuth } from './hooks/useAuth';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { UsageData } from './types/auth';
 
 const API_BASE = "http://127.0.0.1:8000"; // change when deployed
 
 function App() {
-  const { authState } = useAuth();
+  const { authState } = useFirebaseAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mode, setMode] = useState<'with_jd' | 'without_jd'>('with_jd');
   const [jobDescription, setJobDescription] = useState('');
