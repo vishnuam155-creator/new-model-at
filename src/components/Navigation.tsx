@@ -56,6 +56,12 @@ const Navigation: React.FC = () => {
             >
               About Us
             </a>
+            <button
+              onClick={() => window.open('/quotientone', '_blank')}
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              QuotientOne
+            </button>
             
             {authState.isAuthenticated ? (
               <div className="flex items-center space-x-4">
@@ -115,6 +121,12 @@ const Navigation: React.FC = () => {
               >
                 About Us
               </a>
+              <button
+                onClick={() => window.open('/quotientone', '_blank')}
+                className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+              >
+                QuotientOne
+              </button>
               
               {authState.isAuthenticated ? (
                 <div className="px-3 py-2 space-y-2">
